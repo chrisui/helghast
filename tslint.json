@@ -1,0 +1,9 @@
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "jsdoc-format": true,
+    "completed-docs": true,
+    "no-redundant-jsdoc": true
+  },
+  "linterOptions": {"exclude": ["examples/**/*"]}
+}
