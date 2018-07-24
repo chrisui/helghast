@@ -1,5 +1,5 @@
 {
-  "name": "engine",
+  "name": "helghast",
   "version": "0.1.0",
   "description": "A game engine",
   "main": "index.js",
@@ -10,7 +10,8 @@
   },
   "keywords": [
     "game",
-    "engine"
+    "engine",
+    "helghast"
   ],
   "author": "Chris Pearce <hello@chrispearce.me>",
   "license": "MIT",
