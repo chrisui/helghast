@@ -3,7 +3,10 @@
   "rules": {
     "jsdoc-format": true,
     "completed-docs": true,
-    "no-redundant-jsdoc": true
+    "no-redundant-jsdoc": true,
+    "only-arrow-functions": false,
+    "quotemark": false,
+    "trailing-comma": false
   },
   "linterOptions": {"exclude": ["examples/**/*"]}
 }

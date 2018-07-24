@@ -4,7 +4,9 @@
   "description": "A game engine",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint": "tslint --project tsconfig.json --config tslint.json",
+    "compile": "tsc"
   },
   "keywords": [
     "game",
