@@ -1,6 +1,8 @@
-import now from '../core/now';
-import requestAnimationFrame from '../core/requestAnimationFrame';
+import now from '../core/platform/now';
+import requestAnimationFrame from '../core/platform/requestAnimationFrame';
+import cancelAnimationFrame from '../core/platform/cancelAnimationFrame';
 
+/** The main application data class */
 export class Application {
   /** The current frame (0-indexed) */
   public frame: number = 0;
@@ -8,10 +10,6 @@ export class Application {
   public timeScale: number = 1;
   /** Last tracked timestamp */
   public time: number = 0;
-  /** Timestamp of when the update loop completed this frame */
-  public frameUpdateTime: number = 0;
-  /** Timestamp once update and render loop have completed */
-  public frameEndTime: number = 0;
   /** Track the animation loop by id (allows canceling) */
   public animationFrameId: number = 0;
   /** Flag to determine whether rendering should occur for frame */
@@ -20,9 +18,11 @@ export class Application {
   public maxDeltaTime: number = 100;
 }
 
+/** Process a single tick (which will also queue a new tick on next animation frame so dont overuse) */
 export function tick(
   app: Application,
   timestamp = now(),
+  // todo: remove updateCallback (just here for quick testing)
   updateCallback: (app: Application, delta: number) => void,
 ) {
   let delta = timestamp - (app.time || timestamp);
@@ -31,30 +31,29 @@ export function tick(
   app.time = timestamp;
 
   // queue a new tick on next animation frame IMMEDIATELY
-  app.animationFrameId = requestAnimationFrame((ts: number) =>
-    tick(app, ts, updateCallback),
+  app.animationFrameId = requestAnimationFrame(
+    // todo: remove updateCallback (just here for quick testing)
+    (ts: number) => tick(app, ts, updateCallback),
   );
 
   // allow all systems to update
   update(app, delta);
-  updateCallback(app, delta); // todo: remove callback (just here for quick testing)
-  app.frameUpdateTime = now();
+  // todo: remove updateCallback (just here for quick testing)
+  updateCallback(app, delta);
 
-  // render, only if there is something to render
-  if (app.renderFrame) {
-    render(app);
-    app.renderFrame = false;
-  }
+  // pass off rendering to our renderers
+  render(app);
 
   // wrap up this tick
   app.frame += 1;
-  app.frameEndTime = now();
 }
 
+/** Update all registered systems */
 export function update(app: Application, delta: number) {
   // todo: loop through registered systems and update
 }
 
+/** Render via all registered renderers */
 export function render(app: Application) {
   // todo: loop through registered renderers and render
 }
