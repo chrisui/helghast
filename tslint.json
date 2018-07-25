@@ -6,7 +6,10 @@
     "no-redundant-jsdoc": true,
     "only-arrow-functions": false,
     "quotemark": false,
-    "trailing-comma": false
+    "trailing-comma": false,
+    "ordered-imports": false,
+    "array-type": false,
+    "object-literal-sort-keys": false
   },
   "linterOptions": {"exclude": ["examples/**/*"]}
 }

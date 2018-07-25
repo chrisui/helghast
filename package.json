@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "lint": "tslint --project tsconfig.json --config tslint.json",
-    "compile": "tsc"
+    "compile": "tsc",
+    "start": "webpack-dev-server"
   },
   "keywords": [
     "game",
@@ -16,9 +17,14 @@
   "author": "Chris Pearce <hello@chrispearce.me>",
   "license": "MIT",
   "devDependencies": {
+    "awesome-typescript-loader": "^5.2.0",
+    "source-map-loader": "^0.2.3",
     "ts-node": "^7.0.0",
     "tslint": "^5.11.0",
-    "typescript": "^2.9.2"
+    "typescript": "^2.9.2",
+    "webpack": "^4.16.2",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
   },
   "dependencies": {}
 }
