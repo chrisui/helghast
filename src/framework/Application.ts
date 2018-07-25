@@ -20,17 +20,24 @@ export class Application {
   public maxDeltaTime: number = 100;
 }
 
-export function tick(app: Application, timestamp = now()) {
+export function tick(
+  app: Application,
+  timestamp = now(),
+  updateCallback: (app: Application, delta: number) => void,
+) {
   let delta = timestamp - (app.time || timestamp);
   delta = Math.min(Math.max(delta, 0), app.maxDeltaTime);
   delta *= app.timeScale;
   app.time = timestamp;
 
   // queue a new tick on next animation frame IMMEDIATELY
-  app.animationFrameId = requestAnimationFrame((ts) => tick(app, ts));
+  app.animationFrameId = requestAnimationFrame((ts: number) =>
+    tick(app, ts, updateCallback),
+  );
 
   // allow all systems to update
   update(app, delta);
+  updateCallback(app, delta); // todo: remove callback (just here for quick testing)
   app.frameUpdateTime = now();
 
   // render, only if there is something to render
