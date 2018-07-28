@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'development',
   entry: './src/index.ts',
   output: {
     filename: 'bundle.js',
@@ -10,8 +11,12 @@ module.exports = {
   },
   module: {
     rules: [
-      {test: /\.(t|j)sx?$/, use: {loader: 'awesome-typescript-loader'}},
-      {enforce: 'pre', test: /\.js$/, loader: 'source-map-loader'},
+      {
+        test: /\.(t|j)sx?$/,
+        include: path.resolve(__dirname, 'src'),
+        use: {loader: 'awesome-typescript-loader'},
+      },
+      // {enforce: 'pre', test: /\.js$/, loader: 'source-map-loader'},
     ],
   },
   devtool: 'source-map',

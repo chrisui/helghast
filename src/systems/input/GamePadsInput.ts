@@ -103,7 +103,7 @@ export function update(gamepads: GamePadsInput) {
 export function isPressed(
   gamepads: GamePadsInput,
   index: number,
-  buttonIndex: GamePadButtons,
+  buttonIndex: GamePadButtons
 ): boolean {
   if (!gamepads.current[index]) {
     return false;
@@ -117,7 +117,7 @@ export function isPressed(
 export function wasPressed(
   gamepads: GamePadsInput,
   index: number,
-  buttonIndex: GamePadButtons,
+  buttonIndex: GamePadButtons
 ): boolean {
   if (!gamepads.current[index]) {
     return false;
@@ -139,7 +139,7 @@ export function wasPressed(
 export function getButtonValue(
   gamepads: GamePadsInput,
   index: number,
-  buttonIndex: GamePadButtons,
+  buttonIndex: GamePadButtons
 ): number {
   if (!gamepads.current[index]) {
     return 0;
@@ -153,7 +153,7 @@ export function getButtonValue(
 export function getAxisValue(
   gamepads: GamePadsInput,
   index: number,
-  axisIndex: GamePadAxes,
+  axisIndex: GamePadAxes
 ): number {
   if (!gamepads.current[index]) {
     return 0;
@@ -167,5 +167,3 @@ export function getAxisValue(
 
   return value;
 }
-
-export default GamePadsInput;

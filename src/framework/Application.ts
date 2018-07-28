@@ -1,6 +1,10 @@
 import now from '../core/platform/now';
+import benchmark from '../core/debug/sBenchmark';
+import debug from '../core/debug/sDebug';
 import requestAnimationFrame from '../core/platform/requestAnimationFrame';
 import cancelAnimationFrame from '../core/platform/cancelAnimationFrame';
+import {World, update as updateWorld} from './World';
+import {System} from './System';
 
 /** The main application data class */
 export class Application {
@@ -16,30 +20,32 @@ export class Application {
   public renderFrame: boolean = false;
   /** A maximum time for between updates, ignoring lag (before timeScale) */
   public maxDeltaTime: number = 100;
+  /** The active world (contains entities) */
+  public world: World;
+
+  constructor(systems: System[]) {
+    this.world = new World(systems);
+  }
 }
 
 /** Process a single tick (which will also queue a new tick on next animation frame so dont overuse) */
-export function tick(
-  app: Application,
-  timestamp = now(),
-  // todo: remove updateCallback (just here for quick testing)
-  updateCallback: (app: Application, delta: number) => void,
-) {
+export function tick(app: Application, timestamp = now()) {
   let delta = timestamp - (app.time || timestamp);
+  if (app.frame > 30) {
+    // buffer to avoid logging browser churn on startup
+    benchmark.push('frameTime', delta);
+    debug.addLastFrameTimings(benchmark.flushTimings());
+  }
+
   delta = Math.min(Math.max(delta, 0), app.maxDeltaTime);
   delta *= app.timeScale;
   app.time = timestamp;
 
   // queue a new tick on next animation frame IMMEDIATELY
-  app.animationFrameId = requestAnimationFrame(
-    // todo: remove updateCallback (just here for quick testing)
-    (ts: number) => tick(app, ts, updateCallback),
-  );
+  app.animationFrameId = requestAnimationFrame((ts: number) => tick(app, ts));
 
   // allow all systems to update
   update(app, delta);
-  // todo: remove updateCallback (just here for quick testing)
-  updateCallback(app, delta);
 
   // pass off rendering to our renderers
   render(app);
@@ -50,12 +56,14 @@ export function tick(
 
 /** Update all registered systems */
 export function update(app: Application, delta: number) {
-  // todo: loop through registered systems and update
+  benchmark.start('update');
+  updateWorld(app.world, delta);
+  benchmark.end('update');
 }
 
 /** Render via all registered renderers */
 export function render(app: Application) {
   // todo: loop through registered renderers and render
+  benchmark.start('render');
+  benchmark.end('render');
 }
-
-export default Application;

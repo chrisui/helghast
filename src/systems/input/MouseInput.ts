@@ -154,5 +154,3 @@ function getCoords(mouseInput: MouseInput, event: MouseEvent) {
     y: event.clientY - rect.top,
   };
 }
-
-export default MouseInput;

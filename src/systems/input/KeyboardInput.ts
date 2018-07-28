@@ -180,7 +180,7 @@ export function wasPressed(keyboardInput: KeyboardInput, key: Key): boolean {
 export function attach(keyboardInput: KeyboardInput, el = window) {
   // todo: create dom event manager
   el.addEventListener('keydown', (event) =>
-    handleKeyDown(keyboardInput, event),
+    handleKeyDown(keyboardInput, event)
   );
   el.addEventListener('keyup', (event) => handleKeyUp(keyboardInput, event));
 }
@@ -196,5 +196,3 @@ function handleKeyDown(keyboardInput: KeyboardInput, event: KeyboardEvent) {
 function handleKeyUp(keyboardInput: KeyboardInput, event: KeyboardEvent) {
   keyboardInput.tmpKeyStates[event.key] = false;
 }
-
-export default KeyboardInput;
