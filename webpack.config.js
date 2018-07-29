@@ -1,4 +1,5 @@
 const path = require('path');
+const hotReloadingTransformer = require('./tools/typescript/hotReloadingTransformer');
 
 module.exports = {
   mode: 'development',
@@ -14,9 +15,18 @@ module.exports = {
       {
         test: /\.(t|j)sx?$/,
         include: path.resolve(__dirname, 'src'),
-        use: {loader: 'awesome-typescript-loader'},
+        use: {
+          loader: 'awesome-typescript-loader',
+          options: {
+            forceIsolatedModules: true,
+            transpileOnly: true,
+            getCustomTransformers: (program) => ({
+              before: [hotReloadingTransformer(program)],
+            }),
+          },
+        },
       },
-      // {enforce: 'pre', test: /\.js$/, loader: 'source-map-loader'},
+      {enforce: 'pre', test: /\.js$/, loader: 'source-map-loader'},
     ],
   },
   devtool: 'source-map',

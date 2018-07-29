@@ -31,12 +31,11 @@ export class Application {
 /** Process a single tick (which will also queue a new tick on next animation frame so dont overuse) */
 export function tick(app: Application, timestamp = now()) {
   let delta = timestamp - (app.time || timestamp);
-  if (app.frame > 30) {
-    // buffer to avoid logging browser churn on startup
-    benchmark.push('frameTime', delta);
-    debug.addLastFrameTimings(benchmark.flushTimings());
-  }
 
+  // first thing is to allow debug to handle everything since the last frame
+  debug.update(app, delta);
+
+  // clamp our delta for usage this frame
   delta = Math.min(Math.max(delta, 0), app.maxDeltaTime);
   delta *= app.timeScale;
   app.time = timestamp;

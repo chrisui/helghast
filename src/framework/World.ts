@@ -20,6 +20,9 @@ const m = new MouseInput.MouseInput();
 const g = new GamePadsInput.GamePadsInput();
 const k = new KeyboardInput.KeyboardInput();
 
+MouseInput.attach(m);
+KeyboardInput.attach(k);
+
 export function update(world: World, dt: number) {
   MouseInput.update(m);
   GamePadsInput.update(g);
