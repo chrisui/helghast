@@ -21,6 +21,9 @@ export class Debug {
       benchmark.push('frameTime', delta);
       this.addLastFrameTimings(benchmark.flushTimings());
     }
+
+    // move rendering to render loop
+    this.render();
   }
 
   private addLastFrameTimings(timings: [string, number][]) {
@@ -34,7 +37,6 @@ export class Debug {
     }
 
     this.frameTimings.push(timings);
-    this.render();
   }
   private render() {
     const traces = partition(
@@ -76,14 +78,12 @@ export class Debug {
             gridcolor: 'rgb(30, 30, 30)',
           },
           title: '',
-          autosize: true,
           width: debugEl.getBoundingClientRect().width,
           height: debugEl.getBoundingClientRect().height,
           margin: {t: 5, r: 30, b: 20, l: 30},
           paper_bgcolor: 'rgba(0, 0, 0, 0)',
           plot_bgcolor: 'rgba(0, 0, 0, 0)',
         },
-        useResizeHandler: true,
         config: {displayModeBar: false, showLink: false},
       }),
       debugEl,
