@@ -4,7 +4,8 @@
     "target": "ES2015",
     "module": "es2015",
     "experimentalDecorators": true,
-    "strict": true
+    "strict": true,
+    "lib": ["dom", "es2017"]
   },
   "include": ["./src/**/*"]
 }

@@ -1,10 +1,11 @@
-import now from '../core/platform/now';
 import benchmark from '../core/debug/sBenchmark';
 import debug from '../core/debug/sDebug';
 import requestAnimationFrame from '../core/platform/requestAnimationFrame';
+import now from '../core/platform/now';
 import cancelAnimationFrame from '../core/platform/cancelAnimationFrame';
-import {World, update as updateWorld} from './World';
-import {System} from './System';
+
+import * as World from './World';
+import * as System from './System';
 
 /** The main application data class */
 export class Application {
@@ -21,11 +22,7 @@ export class Application {
   /** A maximum time for between updates, ignoring lag (before timeScale) */
   public maxDeltaTime: number = 100;
   /** The active world (contains entities) */
-  public world: World;
-
-  constructor(systems: System[]) {
-    this.world = new World(systems);
-  }
+  public world: World.World = new World.World();
 }
 
 /** Process a single tick (which will also queue a new tick on next animation frame so dont overuse) */
@@ -56,7 +53,7 @@ export function tick(app: Application, timestamp = now()) {
 /** Update all registered systems */
 export function update(app: Application, delta: number) {
   benchmark.start('update');
-  updateWorld(app.world, delta);
+  World.update(app.world, delta);
   benchmark.end('update');
 }
 

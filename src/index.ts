@@ -1,5 +1,7 @@
 import * as App from './framework/Application';
 
-const app = new App.Application([]);
+import * as InputSystem from './systems/InputSystem/InputSystem';
+
+const app = new App.Application();
 
 App.tick(app);

@@ -8,12 +8,13 @@ import {Application} from '../../framework/Application';
 
 const FRAMES_HISTORY_SIZE = 1440; // 10 seconds @ 144hz
 
-const ORDER = ['update', 'render', 'benchmark:renderTimings', 'frameTime'];
+const ORDER = ['update', 'render', 'debug:update', 'frameTime'];
 
 export class Debug {
   private frameTimings: [string, number][][] = [];
 
   public update(app: Application, delta: number) {
+    benchmark.start('debug:update');
     if (app.frame === 30) {
       // buffer to avoid logging browser churn on startup
       benchmark.flushTimings();
@@ -27,7 +28,6 @@ export class Debug {
   }
 
   private addLastFrameTimings(timings: [string, number][]) {
-    benchmark.start('benchmark:renderTimings');
     // cap amount of historic data we're keeping
     if (this.frameTimings.length > FRAMES_HISTORY_SIZE) {
       this.frameTimings.splice(
@@ -87,7 +87,7 @@ export class Debug {
         config: {displayModeBar: false, showLink: false},
       }),
       debugEl,
-      () => benchmark.end('benchmark:renderTimings'),
+      () => benchmark.end('debug:update'),
     );
   }
 }

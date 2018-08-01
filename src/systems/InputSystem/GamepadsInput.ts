@@ -1,5 +1,5 @@
 /** Available buttons on a gamepad */
-export const enum GamePadButtons {
+export const enum GamepadButtons {
   // Face buttons
   Face1,
   Face2,
@@ -25,7 +25,7 @@ export const enum GamePadButtons {
 }
 
 /** Available axes on a gamepad */
-export const enum GamePadAxes {
+export const enum GamepadAxes {
   LStickX,
   LStickY,
   RStickX,
@@ -37,20 +37,20 @@ interface IGamepad {
   axes: number[];
 }
 
-interface IGamePads {
+interface IGamepads {
   [key: number]: IGamepad | null;
 }
 
 /** Current gamepad state */
-export class GamePadsInput {
+export class GamepadsInput {
   public isSupported = !!navigator.getGamepads;
-  public current: IGamePads = {
+  public current: IGamepads = {
     0: null,
     1: null,
     2: null,
     3: null,
   };
-  public last: IGamePads = {
+  public last: IGamepads = {
     0: null,
     1: null,
     2: null,
@@ -61,7 +61,7 @@ export class GamePadsInput {
 }
 
 /** Update gamepad state */
-export function update(gamepads: GamePadsInput) {
+export function update(gamepads: GamepadsInput) {
   if (gamepads.isSupported) {
     let i;
 
@@ -101,9 +101,9 @@ export function update(gamepads: GamePadsInput) {
 
 /** Is a given button pressed? */
 export function isPressed(
-  gamepads: GamePadsInput,
+  gamepads: GamepadsInput,
   index: number,
-  buttonIndex: GamePadButtons
+  buttonIndex: GamePadButtons,
 ): boolean {
   if (!gamepads.current[index]) {
     return false;
@@ -115,9 +115,9 @@ export function isPressed(
 
 /** Was a given button pressed in this update? */
 export function wasPressed(
-  gamepads: GamePadsInput,
+  gamepads: GamepadsInput,
   index: number,
-  buttonIndex: GamePadButtons
+  buttonIndex: GamePadButtons,
 ): boolean {
   if (!gamepads.current[index]) {
     return false;
@@ -137,9 +137,9 @@ export function wasPressed(
 
 /** What is the value of a given button press? Useful for triggers. */
 export function getButtonValue(
-  gamepads: GamePadsInput,
+  gamepads: GamepadsInput,
   index: number,
-  buttonIndex: GamePadButtons
+  buttonIndex: GamePadButtons,
 ): number {
   if (!gamepads.current[index]) {
     return 0;
@@ -151,9 +151,9 @@ export function getButtonValue(
 
 /** What is the value for a given axis? */
 export function getAxisValue(
-  gamepads: GamePadsInput,
+  gamepads: GamepadsInput,
   index: number,
-  axisIndex: GamePadAxes
+  axisIndex: GamepadAxes,
 ): number {
   if (!gamepads.current[index]) {
     return 0;
