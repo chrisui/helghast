@@ -1,11 +1,12 @@
-const MOUSE_WHEEL_NOTCH = 120;
+import Services from '../../runtime/ServiceRegistry';
+import {IMouseEvent} from '../../services/interfaces/IInputService';
 
-export const enum MouseButtons {
+export const enum MouseButton {
   Left,
   Middle,
   Right,
-  Four,
-  Five,
+  Back, // osx unsupported
+  Forward, // osx unsupported
 }
 
 interface IButtonStates {
@@ -15,6 +16,8 @@ interface IButtonStates {
 export class MouseInput {
   public x: number = 0;
   public y: number = 0;
+  public tmpXDelta: number = 0;
+  public tmpYDelta: number = 0;
   public tmpX: number = 0;
   public tmpY: number = 0;
   public deltaX: number = 0;
@@ -44,6 +47,15 @@ export class MouseInput {
   };
 }
 
+/** Setup */
+export function attach(mouse: MouseInput) {
+  Services.input.onMouseUp((event) => handleMouseUp(mouse, event));
+  Services.input.onMouseDown((event) => handleMouseDown(mouse, event));
+  Services.input.onMouseMove((event) => handleMouseMove(mouse, event));
+  Services.input.onMouseWheel((event) => handleMouseWheel(mouse, event));
+}
+
+/** Update within loop */
 export function update(mouse: MouseInput) {
   for (const i in mouse.tmpButtonStates) {
     if (mouse.lastButtonStates.hasOwnProperty(i)) {
@@ -51,106 +63,46 @@ export function update(mouse: MouseInput) {
       mouse.buttonStates[i] = mouse.tmpButtonStates[i];
     }
   }
-  mouse.deltaX = mouse.tmpX - mouse.x;
-  mouse.deltaY = mouse.tmpY - mouse.y;
+  mouse.deltaX = mouse.tmpXDelta;
+  mouse.deltaY = mouse.tmpYDelta;
   mouse.x = mouse.tmpX;
   mouse.y = mouse.tmpY;
   mouse.wheelDelta = mouse.tmpWheelDelta;
+
+  // reset incremental temp values
   mouse.tmpWheelDelta = 0;
+  mouse.tmpXDelta = 0;
+  mouse.tmpYDelta = 0;
 }
 
-export function isPressed(mouse: MouseInput, button: MouseButtons) {
+/** Is given button currently pressed? */
+export function isPressed(mouse: MouseInput, button: MouseButton) {
   return mouse.buttonStates[button];
 }
 
 /** Was a given button pressed in this update? */
-export function wasPressed(mouse: MouseInput, button: MouseButtons): boolean {
+export function wasPressed(mouse: MouseInput, button: MouseButton): boolean {
   const isPressedNow = mouse.buttonStates[button];
   const wasPressedLast = mouse.lastButtonStates[button];
 
   return isPressedNow && !wasPressedLast;
 }
 
-export function attach(mouse: MouseInput, el = window) {
-  // todo: create dom event manager
-  el.addEventListener('mouseup', (event) => handleMouseUp(mouse, event));
-  el.addEventListener('mousedown', (event) => handleMouseDown(mouse, event));
-  el.addEventListener('mousemove', (event) => handleMouseMove(mouse, event));
-  el.addEventListener('mousewheel', (event) => handleMouseWheel(mouse, event));
-}
-
-export function detach(mouse: MouseInput, el = window) {
-  // todo: handle removing listeners
-}
-
-function handleMouseUp(mouse: MouseInput, event: MouseEvent) {
+function handleMouseUp(mouse: MouseInput, event: IMouseEvent) {
   mouse.tmpButtonStates[event.button] = false;
 }
 
-function handleMouseDown(mouse: MouseInput, event: MouseEvent) {
+function handleMouseDown(mouse: MouseInput, event: IMouseEvent) {
   mouse.tmpButtonStates[event.button] = true;
 }
 
-function handleMouseMove(mouse: MouseInput, event: MouseEvent) {
-  // todo: create dom reference manager
-  // only works with window attachment for now
-  if (isPointerLocked()) {
-    mouse.tmpX += event.movementX || 0;
-    mouse.tmpY += event.movementY || 0;
-  } else {
-    const c = getCoords(mouse, event);
-    if (c) {
-      mouse.tmpX = c.x;
-      mouse.tmpY = c.y;
-    }
-  }
+function handleMouseMove(mouse: MouseInput, event: IMouseEvent) {
+  mouse.tmpX = event.x;
+  mouse.tmpY = event.y;
+  mouse.tmpXDelta += event.xDelta;
+  mouse.tmpYDelta += event.yDelta;
 }
 
-function handleMouseWheel(mouse: MouseInput, event: MouseWheelEvent) {
-  mouse.tmpWheelDelta += event.wheelDelta / MOUSE_WHEEL_NOTCH;
-}
-
-function preventDefault(event: Event) {
-  event.preventDefault();
-}
-
-export function isPointerLocked() {
-  return !!document.pointerLockElement;
-}
-
-export function disableContextMenu(el = window) {
-  el.addEventListener('contextmenu', preventDefault);
-}
-
-export function enableContextMenu(el = window) {
-  el.removeEventListener('contextmenu', preventDefault);
-}
-
-export function enablePointerLock() {
-  document.body.requestPointerLock();
-}
-
-export function disablePointerLock() {
-  document.exitPointerLock();
-}
-
-function getCoords(mouseInput: MouseInput, event: MouseEvent) {
-  // todo: lookup from dom element manager
-  const el = document.getElementById('app') as HTMLElement;
-  const rect = el.getBoundingClientRect();
-
-  // mouse is outside of canvas
-  if (
-    event.clientX < rect.left ||
-    event.clientX >= rect.left + rect.width ||
-    event.clientY < rect.top ||
-    event.clientY >= rect.top + rect.height
-  ) {
-    return null;
-  }
-
-  return {
-    x: event.clientX - rect.left,
-    y: event.clientY - rect.top,
-  };
+function handleMouseWheel(mouse: MouseInput, event: IMouseEvent) {
+  mouse.tmpWheelDelta += event.wheelDelta;
 }

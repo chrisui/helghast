@@ -1,5 +1,8 @@
+import Services from '../../runtime/ServiceRegistry';
+import {IGamepad} from '../../services/interfaces/IInputService';
+
 /** Available buttons on a gamepad */
-export const enum GamepadButtons {
+export const enum GamepadButton {
   // Face buttons
   Face1,
   Face2,
@@ -25,16 +28,11 @@ export const enum GamepadButtons {
 }
 
 /** Available axes on a gamepad */
-export const enum GamepadAxes {
+export const enum GamepadAxis {
   LStickX,
   LStickY,
   RStickX,
   RStickY,
-}
-
-interface IGamepad {
-  buttons: {value: number; pressed: boolean}[];
-  axes: number[];
 }
 
 interface IGamepads {
@@ -43,7 +41,6 @@ interface IGamepads {
 
 /** Current gamepad state */
 export class GamepadsInput {
-  public isSupported = !!navigator.getGamepads;
   public current: IGamepads = {
     0: null,
     1: null,
@@ -57,53 +54,51 @@ export class GamepadsInput {
     3: null,
   };
   public numDevices = 0;
-  public deadZone = 0.25;
 }
 
 /** Update gamepad state */
 export function update(gamepads: GamepadsInput) {
-  if (gamepads.isSupported) {
-    let i;
+  let i;
 
-    // move current buttons status into previous array
-    for (i = 0; i < gamepads.numDevices; i++) {
-      if (gamepads.current[i] == null) {
-        gamepads.last[i] = null;
-        continue;
-      }
-
-      const currentPad = gamepads.current[i] as Gamepad;
-      const buttons = currentPad.buttons;
-      const buttonsLen = buttons.length;
-      const pad: IGamepad = gamepads.last[i] || {
-        buttons: new Array(buttonsLen),
-        axes: [], // axes not important in history checking
-      };
-
-      let j;
-      for (j = 0; j < buttonsLen; j++) {
-        pad.buttons[j] = pad.buttons[j] || {};
-        pad.buttons[j].value = currentPad.buttons[j].value;
-        pad.buttons[j].pressed = currentPad.buttons[j].pressed;
-      }
-      gamepads.last[i] = pad;
+  // move current buttons status into previous array
+  // reusing objects where possible
+  for (i = 0; i < gamepads.numDevices; i++) {
+    if (gamepads.current[i] == null) {
+      gamepads.last[i] = null;
+      continue;
     }
 
-    // update with new gamepad values
-    const padDevices = navigator.getGamepads();
-    const numDevices = padDevices.length;
-    for (i = 0; i < numDevices; i++) {
-      gamepads.current[i] = padDevices[i];
+    const currentPad = gamepads.current[i] as IGamepad;
+    const buttons = currentPad.buttons;
+    const buttonsLen = buttons.length;
+    const pad: IGamepad = gamepads.last[i] || {
+      buttons: new Array(buttonsLen),
+      axes: [], // axes not important in history checking
+    };
+
+    let j;
+    for (j = 0; j < buttonsLen; j++) {
+      pad.buttons[j] = pad.buttons[j] || {};
+      pad.buttons[j].value = currentPad.buttons[j].value;
+      pad.buttons[j].pressed = currentPad.buttons[j].pressed;
     }
-    gamepads.numDevices = numDevices;
+    gamepads.last[i] = pad;
   }
+
+  // update with new gamepad values
+  const padDevices = Services.input.getGamepads();
+  const numDevices = padDevices.length;
+  for (i = 0; i < numDevices; i++) {
+    gamepads.current[i] = padDevices[i];
+  }
+  gamepads.numDevices = numDevices;
 }
 
 /** Is a given button pressed? */
 export function isPressed(
   gamepads: GamepadsInput,
   index: number,
-  buttonIndex: GamePadButtons,
+  buttonIndex: GamepadButton
 ): boolean {
   if (!gamepads.current[index]) {
     return false;
@@ -117,7 +112,7 @@ export function isPressed(
 export function wasPressed(
   gamepads: GamepadsInput,
   index: number,
-  buttonIndex: GamePadButtons,
+  buttonIndex: GamepadButton
 ): boolean {
   if (!gamepads.current[index]) {
     return false;
@@ -139,7 +134,7 @@ export function wasPressed(
 export function getButtonValue(
   gamepads: GamepadsInput,
   index: number,
-  buttonIndex: GamePadButtons,
+  buttonIndex: GamepadButton
 ): number {
   if (!gamepads.current[index]) {
     return 0;
@@ -153,7 +148,7 @@ export function getButtonValue(
 export function getAxisValue(
   gamepads: GamepadsInput,
   index: number,
-  axisIndex: GamepadAxes,
+  axisIndex: GamepadAxis
 ): number {
   if (!gamepads.current[index]) {
     return 0;
@@ -161,7 +156,7 @@ export function getAxisValue(
 
   // @ts-ignore need to fix nullable issue
   const value = gamepads.current[index].axes[axisIndex];
-  if (Math.abs(value) < gamepads.deadZone) {
+  if (Math.abs(value) < Services.input.gamepadDeadzone) {
     return 0;
   }
 

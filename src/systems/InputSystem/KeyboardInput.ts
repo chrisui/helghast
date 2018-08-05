@@ -1,3 +1,9 @@
+import Services from '../../runtime/ServiceRegistry';
+import {
+  IKeyEvent,
+  TEventBindingID,
+} from '../../services/interfaces/IInputService';
+
 // todo: use KeyboardEvent.code instead of .key
 //       https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
 export enum Key {
@@ -156,6 +162,11 @@ export class KeyboardInput {
   public lastKeyStates: IKeyStates = {};
 }
 
+export function setup(keyboardInput: KeyboardInput) {
+  Services.input.onKeyDown((event) => handleKeyDown(keyboardInput, event));
+  Services.input.onKeyUp((event) => handleKeyUp(keyboardInput, event));
+}
+
 export function update(keyboardInput: KeyboardInput) {
   for (const i in keyboardInput.tmpKeyStates) {
     if (keyboardInput.tmpKeyStates.hasOwnProperty(i)) {
@@ -166,33 +177,21 @@ export function update(keyboardInput: KeyboardInput) {
 }
 
 export function isPressed(keyboardInput: KeyboardInput, key: Key) {
-  return !!keyboardInput.keyStates[key];
+  return keyboardInput.keyStates[key];
 }
 
 /** Was a given button pressed in this update? */
 export function wasPressed(keyboardInput: KeyboardInput, key: Key): boolean {
-  const isPressedNow = !!keyboardInput.keyStates[key];
-  const wasPressedLast = !!keyboardInput.lastKeyStates[key];
+  const isPressedNow = keyboardInput.keyStates[key];
+  const wasPressedLast = keyboardInput.lastKeyStates[key];
 
   return isPressedNow && !wasPressedLast;
 }
 
-export function attach(keyboardInput: KeyboardInput, el = window) {
-  // todo: create dom event manager
-  el.addEventListener('keydown', (event) =>
-    handleKeyDown(keyboardInput, event)
-  );
-  el.addEventListener('keyup', (event) => handleKeyUp(keyboardInput, event));
-}
-
-export function detach(keyboardInput: KeyboardInput, el = window) {
-  // todo: handle removing listeners
-}
-
-function handleKeyDown(keyboardInput: KeyboardInput, event: KeyboardEvent) {
+function handleKeyDown(keyboardInput: KeyboardInput, event: IKeyEvent) {
   keyboardInput.tmpKeyStates[event.key] = true;
 }
 
-function handleKeyUp(keyboardInput: KeyboardInput, event: KeyboardEvent) {
+function handleKeyUp(keyboardInput: KeyboardInput, event: IKeyEvent) {
   keyboardInput.tmpKeyStates[event.key] = false;
 }

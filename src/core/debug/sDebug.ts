@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import * as Plot from 'react-plotly.js';
 import {flatten, groupBy, map, partition, sortBy} from 'lodash';
 
-import benchmark from './sBenchmark';
+import Services from '../../runtime/ServiceRegistry';
 import {Application} from '../../framework/Application';
 
 const FRAMES_HISTORY_SIZE = 1440; // 10 seconds @ 144hz
@@ -14,13 +14,13 @@ export class Debug {
   private frameTimings: [string, number][][] = [];
 
   public update(app: Application, delta: number) {
-    benchmark.start('debug:update');
+    Services.benchmark.start('debug:update');
     if (app.frame === 30) {
       // buffer to avoid logging browser churn on startup
-      benchmark.flushTimings();
+      Services.benchmark.flush();
     } else if (app.frame > 30) {
-      benchmark.push('frameTime', delta);
-      this.addLastFrameTimings(benchmark.flushTimings());
+      Services.benchmark.push('frameTime', delta);
+      this.addLastFrameTimings(Services.benchmark.flush());
     }
 
     // move rendering to render loop
@@ -32,7 +32,7 @@ export class Debug {
     if (this.frameTimings.length > FRAMES_HISTORY_SIZE) {
       this.frameTimings.splice(
         0,
-        this.frameTimings.length - FRAMES_HISTORY_SIZE,
+        this.frameTimings.length - FRAMES_HISTORY_SIZE
       );
     }
 
@@ -53,11 +53,11 @@ export class Debug {
               color: name === 'frameTime' ? 'rgb(100, 100, 100)' : undefined,
               width: 0.5,
             },
-          }),
+          })
         ),
-        (obj) => ORDER.indexOf(obj.name),
+        (obj) => ORDER.indexOf(obj.name)
       ),
-      (obj) => obj.name === 'frameTime',
+      (obj) => obj.name === 'frameTime'
     );
 
     const debugEl = document.getElementById('debug') as HTMLElement;
@@ -87,7 +87,7 @@ export class Debug {
         config: {displayModeBar: false, showLink: false},
       }),
       debugEl,
-      () => benchmark.end('debug:update'),
+      () => Services.benchmark.end('debug:update')
     );
   }
 }
@@ -95,7 +95,7 @@ export class Debug {
 type PlotlyFill = 'tonexty' | 'tozeroy' | undefined;
 
 function stackArea(
-  traces: {x: number[]; y: number[]; name: string; fill?: PlotlyFill}[],
+  traces: {x: number[]; y: number[]; name: string; fill?: PlotlyFill}[]
 ) {
   for (let i = 0; i < traces.length; i++) {
     if (i === 0) {

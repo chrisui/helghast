@@ -1,4 +1,4 @@
-import benchmark from '../core/debug/sBenchmark';
+import Services from '../runtime/ServiceRegistry';
 import debug from '../core/debug/sDebug';
 import requestAnimationFrame from '../core/platform/requestAnimationFrame';
 import now from '../core/platform/now';
@@ -52,14 +52,14 @@ export function tick(app: Application, timestamp = now()) {
 
 /** Update all registered systems */
 export function update(app: Application, delta: number) {
-  benchmark.start('update');
+  Services.benchmark.start('update');
   World.update(app.world, delta);
-  benchmark.end('update');
+  Services.benchmark.end('update');
 }
 
 /** Render via all registered renderers */
 export function render(app: Application) {
   // todo: loop through registered renderers and render
-  benchmark.start('render');
-  benchmark.end('render');
+  Services.benchmark.start('render');
+  Services.benchmark.end('render');
 }

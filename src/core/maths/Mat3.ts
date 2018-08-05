@@ -1,3 +1,8 @@
+/**
+ * [ xx, xy, xz,
+ *   yx, yy, yz,
+ *   zx, zy, zz, ]
+ */
 export class Mat3 {
   public xx: number;
   public xy: number;
@@ -18,7 +23,7 @@ export class Mat3 {
     yz?: number,
     zx?: number,
     zy?: number,
-    zz?: number,
+    zz?: number
   ) {
     this.xx = xx || 0;
     this.xy = xy || 0;

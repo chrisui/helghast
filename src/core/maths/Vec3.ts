@@ -1,3 +1,6 @@
+/**
+ * [ x, y, z ]
+ */
 export class Vec3 {
   public x: number;
   public y: number;

@@ -1,3 +1,9 @@
+/**
+ * [ xx, xy, xz, xw,
+ *   yx, yy, yz, yw,
+ *   zx, zy, zz, zw,
+ *   wx, wy, wz, ww ]
+ */
 export class Mat4 {
   public xx: number;
   public xy: number;
@@ -32,7 +38,7 @@ export class Mat4 {
     wx?: number,
     wy?: number,
     wz?: number,
-    ww?: number,
+    ww?: number
   ) {
     this.xx = xx || 0;
     this.xy = xy || 0;

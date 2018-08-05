@@ -9,6 +9,14 @@ function filterFunctionalModules(name) {
 module.exports = function(program) {
   return function(context) {
     return function(node) {
+      // if this module is already handling hot module reloading then we wont do anything
+      if (
+        tsquery(node, 'IfStatement:has([name="module"]):has([name="hot"])')
+          .length
+      ) {
+        return node;
+      }
+
       const imports = tsquery(node, 'ImportDeclaration');
       const basicReloadableImports = imports
         .map((importStatement) => importStatement.moduleSpecifier.text)
@@ -18,27 +26,27 @@ module.exports = function(program) {
         const reload = ts.createIf(
           ts.createPropertyAccess(
             ts.createIdentifier('module'),
-            ts.createIdentifier('hot'),
+            ts.createIdentifier('hot')
           ),
           ts.createStatement(
             ts.createCall(
               ts.createPropertyAccess(
                 ts.createPropertyAccess(
                   ts.createIdentifier('module'),
-                  ts.createIdentifier('hot'),
+                  ts.createIdentifier('hot')
                 ),
-                ts.createIdentifier('accept'),
+                ts.createIdentifier('accept')
               ),
               undefined,
               [
                 ts.createArrayLiteral(
                   basicReloadableImports.map((path) =>
-                    ts.createStringLiteral(path),
-                  ),
+                    ts.createStringLiteral(path)
+                  )
                 ),
-              ],
-            ),
-          ),
+              ]
+            )
+          )
         );
 
         return ts.updateSourceFileNode(node, [...node.statements, reload]);
