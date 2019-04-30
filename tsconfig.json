@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
     "outDir": "./build",
-    "target": "ES2015",
-    "module": "es2015",
+    "target": "esnext",
+    "module": "esnext",
     "experimentalDecorators": true,
     "strict": true,
     "lib": ["dom", "es2017"]
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*", "./types/**/*"]
 }

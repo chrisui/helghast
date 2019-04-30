@@ -1,6 +1,6 @@
-import IBenchmarkService from '../interfaces/IBenchmarkService';
+import IBenchmarkService from './IBenchmarkService';
 
-export class NullBenchmarkService implements IBenchmarkService {
+export class BenchmarkService implements IBenchmarkService {
   public start(key: string) {
     return undefined;
   }
@@ -14,5 +14,3 @@ export class NullBenchmarkService implements IBenchmarkService {
     return [];
   }
 }
-
-export default NullBenchmarkService;

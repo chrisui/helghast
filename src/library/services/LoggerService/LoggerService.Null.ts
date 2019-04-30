@@ -1,6 +1,6 @@
-import ILoggerService from '../interfaces/ILoggerService';
+import ILoggerService from './ILoggerService';
 
-export class NullLoggerService implements ILoggerService {
+export class LoggerService implements ILoggerService {
   public info(msg: string) {
     return undefined;
   }
@@ -14,5 +14,3 @@ export class NullLoggerService implements ILoggerService {
     return undefined;
   }
 }
-
-export default NullLoggerService;

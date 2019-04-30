@@ -2,14 +2,16 @@
   "extends": "tslint:recommended",
   "rules": {
     "jsdoc-format": true,
-    "completed-docs": true,
+    "completed-docs": false,
     "no-redundant-jsdoc": true,
     "only-arrow-functions": false,
     "quotemark": false,
     "trailing-comma": false,
     "ordered-imports": false,
     "array-type": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "arrow-parens": false,
+    "no-namespace": false
   },
   "linterOptions": {"exclude": ["examples/**/*"]}
 }

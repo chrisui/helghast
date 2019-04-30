@@ -19,34 +19,34 @@ module.exports = function(program) {
 
       const imports = tsquery(node, 'ImportDeclaration');
       const basicReloadableImports = imports
-        .map((importStatement) => importStatement.moduleSpecifier.text)
+        .map(importStatement => importStatement.moduleSpecifier.text)
         .filter(filterFunctionalModules);
 
       if (basicReloadableImports.length > 0) {
         const reload = ts.createIf(
           ts.createPropertyAccess(
             ts.createIdentifier('module'),
-            ts.createIdentifier('hot')
+            ts.createIdentifier('hot'),
           ),
           ts.createStatement(
             ts.createCall(
               ts.createPropertyAccess(
                 ts.createPropertyAccess(
                   ts.createIdentifier('module'),
-                  ts.createIdentifier('hot')
+                  ts.createIdentifier('hot'),
                 ),
-                ts.createIdentifier('accept')
+                ts.createIdentifier('accept'),
               ),
               undefined,
               [
                 ts.createArrayLiteral(
-                  basicReloadableImports.map((path) =>
-                    ts.createStringLiteral(path)
-                  )
+                  basicReloadableImports.map(path =>
+                    ts.createStringLiteral(path),
+                  ),
                 ),
-              ]
-            )
-          )
+              ],
+            ),
+          ),
         );
 
         return ts.updateSourceFileNode(node, [...node.statements, reload]);

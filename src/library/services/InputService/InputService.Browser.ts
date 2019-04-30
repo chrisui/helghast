@@ -1,15 +1,13 @@
-import IInputService, {
+import {
+  IInputService,
   TKeyEventHandler,
   TMouseEventHandler,
-} from './interfaces/IInputService';
+} from './IInputService';
 
 type TRawEventHandler = (event: Event) => void;
 
-/** Multiplier so we can normalise MouseWheelEvent.wheelDelta */
-const MOUSE_WHEEL_NOTCH = 120;
-
 /** An input system which works within the browser environment */
-export class BrowserInputService implements IInputService {
+export class InputService implements IInputService {
   public readonly gamepadDeadzone = 0.25;
   private flagIsContextMenuEnabled = true;
   private listeners: {
@@ -54,47 +52,47 @@ export class BrowserInputService implements IInputService {
   public onMouseDown(handler: TMouseEventHandler) {
     return this.createEventBinding(
       'mousedown',
-      this.mapMouseEventHandler(handler)
+      this.mapMouseEventHandler(handler),
     );
   }
 
   public onMouseUp(handler: TMouseEventHandler) {
     return this.createEventBinding(
       'mouseup',
-      this.mapMouseEventHandler(handler)
+      this.mapMouseEventHandler(handler),
     );
   }
 
   public onMouseWheel(handler: TMouseEventHandler) {
     return this.createEventBinding(
       'mousescroll',
-      this.mapMouseEventHandler(handler)
+      this.mapMouseEventHandler(handler),
     );
   }
 
   public onMouseMove(handler: TMouseEventHandler) {
     return this.createEventBinding(
       'mousemove',
-      this.mapMouseEventHandler(handler)
+      this.mapMouseEventHandler(handler),
     );
   }
 
   public removeEventBinding(id: number) {
     window.removeEventListener(
       this.listeners[id].type,
-      this.listeners[id].listener
+      this.listeners[id].listener,
     );
     delete this.listeners[id];
     return true;
   }
 
   public getGamepads() {
-    return navigator.getGamepads().filter((gamepad) => !!gamepad) as Gamepad[];
+    return navigator.getGamepads().filter(gamepad => !!gamepad) as Gamepad[];
   }
 
   private createEventBinding(
     type: string,
-    listener: any /* RawEventListener */
+    listener: any /* RawEventListener */,
   ) {
     const id = ++this.lastListenerId;
     this.listeners[id] = {type, listener};
@@ -111,7 +109,9 @@ export class BrowserInputService implements IInputService {
       handler({
         button: event.button,
         wheelDelta:
-          (event as MouseWheelEvent).wheelDelta || 0 / MOUSE_WHEEL_NOTCH,
+          event instanceof WheelEvent
+            ? event.deltaY / Math.abs(event.deltaY)
+            : 0,
         x: event.clientX,
         y: event.clientY,
         xDelta: event.movementX,
@@ -129,5 +129,3 @@ export class BrowserInputService implements IInputService {
     };
   }
 }
-
-export default BrowserInputService;

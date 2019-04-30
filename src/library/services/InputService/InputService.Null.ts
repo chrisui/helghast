@@ -1,10 +1,11 @@
-import IInputService, {
+import {
+  IInputService,
   TKeyEventHandler,
   TEventBindingID,
   TMouseEventHandler,
-} from '../interfaces/IInputService';
+} from './IInputService';
 
-export class NullInputService implements IInputService {
+export class InputService implements IInputService {
   public readonly gamepadDeadzone = 0;
   public isPointerLocked() {
     return false;
@@ -49,5 +50,3 @@ export class NullInputService implements IInputService {
     return [];
   }
 }
-
-export default NullInputService;

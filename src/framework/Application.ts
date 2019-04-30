@@ -1,8 +1,5 @@
 import Services from '../runtime/ServiceRegistry';
 import debug from '../core/debug/sDebug';
-import requestAnimationFrame from '../core/platform/requestAnimationFrame';
-import now from '../core/platform/now';
-import cancelAnimationFrame from '../core/platform/cancelAnimationFrame';
 
 import * as World from './World';
 import * as System from './System';
@@ -26,7 +23,7 @@ export class Application {
 }
 
 /** Process a single tick (which will also queue a new tick on next animation frame so dont overuse) */
-export function tick(app: Application, timestamp = now()) {
+export function tick(app: Application, timestamp = Services.platform.now()) {
   let delta = timestamp - (app.time || timestamp);
 
   // first thing is to allow debug to handle everything since the last frame
@@ -38,7 +35,9 @@ export function tick(app: Application, timestamp = now()) {
   app.time = timestamp;
 
   // queue a new tick on next animation frame IMMEDIATELY
-  app.animationFrameId = requestAnimationFrame((ts: number) => tick(app, ts));
+  app.animationFrameId = Services.platform.requestAnimationFrame((ts: number) =>
+    tick(app, ts),
+  );
 
   // allow all systems to update
   update(app, delta);

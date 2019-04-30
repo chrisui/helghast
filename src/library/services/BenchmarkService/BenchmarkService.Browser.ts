@@ -1,14 +1,14 @@
-import now from '../core/platform/now';
-import IBenchmarkService from './interfaces/IBenchmarkService';
+import {IBenchmarkService} from './IBenchmarkService';
+import Services from '../../../runtime/ServiceRegistry';
 
 export class BenchmarkService implements IBenchmarkService {
   private startTimes: {[key: string]: number} = {};
   private timings: [string, number][] = [];
   public start(key: string) {
-    this.startTimes[key] = now();
+    this.startTimes[key] = Services.platform.now();
   }
   public end(key: string) {
-    this.timings.push([key, now() - this.startTimes[key]]);
+    this.timings.push([key, Services.platform.now() - this.startTimes[key]]);
   }
   public push(key: string, timing: number) {
     this.timings.push([key, timing]);

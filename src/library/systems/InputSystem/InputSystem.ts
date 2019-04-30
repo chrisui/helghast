@@ -1,4 +1,4 @@
-import {System} from '../../framework/System';
+import {System} from '../../../framework/System';
 
 import * as GamePadsInput from './GamepadsInput';
 import * as KeyboardInput from './KeyboardInput';

@@ -32,7 +32,7 @@ export class Debug {
     if (this.frameTimings.length > FRAMES_HISTORY_SIZE) {
       this.frameTimings.splice(
         0,
-        this.frameTimings.length - FRAMES_HISTORY_SIZE
+        this.frameTimings.length - FRAMES_HISTORY_SIZE,
       );
     }
 
@@ -47,17 +47,17 @@ export class Debug {
             // type: 'scattergl',
             // mode: 'lines',
             x: timings.map((v, i) => i + 1),
-            y: timings.map((v) => v[1]),
+            y: timings.map(v => v[1]),
             name,
             line: {
               color: name === 'frameTime' ? 'rgb(100, 100, 100)' : undefined,
               width: 0.5,
             },
-          })
+          }),
         ),
-        (obj) => ORDER.indexOf(obj.name)
+        obj => ORDER.indexOf(obj.name),
       ),
-      (obj) => obj.name === 'frameTime'
+      obj => obj.name === 'frameTime',
     );
 
     const debugEl = document.getElementById('debug') as HTMLElement;
@@ -65,7 +65,7 @@ export class Debug {
     const data = [...traces[1], ...traces[0]];
     ReactDOM.render(
       // @ts-ignore Plot errornous type
-      React.createElement(Plot, {
+      React.createElement(Plot.default, {
         data,
         layout: {
           font: {
@@ -87,7 +87,7 @@ export class Debug {
         config: {displayModeBar: false, showLink: false},
       }),
       debugEl,
-      () => Services.benchmark.end('debug:update')
+      () => Services.benchmark.end('debug:update'),
     );
   }
 }
@@ -95,7 +95,7 @@ export class Debug {
 type PlotlyFill = 'tonexty' | 'tozeroy' | undefined;
 
 function stackArea(
-  traces: {x: number[]; y: number[]; name: string; fill?: PlotlyFill}[]
+  traces: {x: number[]; y: number[]; name: string; fill?: PlotlyFill}[],
 ) {
   for (let i = 0; i < traces.length; i++) {
     if (i === 0) {

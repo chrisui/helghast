@@ -1,8 +1,8 @@
-import Services from '../../runtime/ServiceRegistry';
+import Services from '../../../runtime/ServiceRegistry';
 import {
   IKeyEvent,
   TEventBindingID,
-} from '../../services/interfaces/IInputService';
+} from '../../services/InputService/IInputService';
 
 // todo: use KeyboardEvent.code instead of .key
 //       https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
@@ -163,8 +163,8 @@ export class KeyboardInput {
 }
 
 export function setup(keyboardInput: KeyboardInput) {
-  Services.input.onKeyDown((event) => handleKeyDown(keyboardInput, event));
-  Services.input.onKeyUp((event) => handleKeyUp(keyboardInput, event));
+  Services.input.onKeyDown(event => handleKeyDown(keyboardInput, event));
+  Services.input.onKeyUp(event => handleKeyUp(keyboardInput, event));
 }
 
 export function update(keyboardInput: KeyboardInput) {

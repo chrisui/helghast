@@ -38,5 +38,3 @@ export interface IInputService {
   removeEventBinding(id: TEventBindingID): boolean;
   getGamepads(): IGamepad[];
 }
-
-export default IInputService;

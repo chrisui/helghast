@@ -5,17 +5,19 @@ import * as App from './framework/Application';
 import Services from './runtime/ServiceRegistry';
 
 // import services
-import BrowserInputService from './services/BrowserInputService';
-import BenchmarkService from './services/BenchmarkService';
-import ConsoleLoggerService from './services/ConsoleLoggerService';
+import * as InputService from './library/services/InputService';
+import * as BenchmarkService from './library/services/BenchmarkService';
+import * as LoggerService from './library/services/LoggerService';
+import * as PlatformService from './library/services/PlatformService';
 
 // import systems
-import * as InputSystem from './systems/InputSystem/InputSystem';
+import * as InputSystem from './library/systems/InputSystem/InputSystem';
 
 // configure systems
-Services.input = new BrowserInputService();
-Services.benchmark = new BenchmarkService();
-Services.log = new ConsoleLoggerService();
+Services.input = new InputService.Browser();
+Services.benchmark = new BenchmarkService.Browser();
+Services.log = new LoggerService.Browser();
+Services.platform = new PlatformService.Browser();
 
 // initialise application
 const app = new App.Application();

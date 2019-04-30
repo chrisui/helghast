@@ -1,16 +1,13 @@
-import IInputService from '../services/interfaces/IInputService';
-import NullInputService from '../services/null/NullInputService';
-
-import IBenchmarkService from '../services/interfaces/IBenchmarkService';
-import NullBenchmarkService from '../services/null/NullBenchmarkService';
-
-import ILoggerService from '../services/interfaces/ILoggerService';
-import NullLoggerService from '../services/null/NullLoggerService';
+import * as InputService from '../library/services/InputService';
+import * as BenchmarkService from '../library/services/BenchmarkService';
+import * as LoggerService from '../library/services/LoggerService';
+import * as PlatformService from '../library/services/PlatformService';
 
 export class ServiceRegistry {
-  public static input: IInputService = new NullInputService();
-  public static benchmark: IBenchmarkService = new NullBenchmarkService();
-  public static log: ILoggerService = new NullLoggerService();
+  public static input: InputService.Interface = new InputService.Null();
+  public static benchmark: BenchmarkService.Interface = new BenchmarkService.Null();
+  public static log: LoggerService.Interface = new LoggerService.Null();
+  public static platform: PlatformService.Interface = new PlatformService.Null();
 }
 
 export default ServiceRegistry;

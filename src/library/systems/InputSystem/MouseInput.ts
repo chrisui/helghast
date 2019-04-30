@@ -1,5 +1,5 @@
-import Services from '../../runtime/ServiceRegistry';
-import {IMouseEvent} from '../../services/interfaces/IInputService';
+import Services from '../../../runtime/ServiceRegistry';
+import {IMouseEvent} from '../../services/InputService/IInputService';
 
 export const enum MouseButton {
   Left,
@@ -49,10 +49,10 @@ export class MouseInput {
 
 /** Setup */
 export function attach(mouse: MouseInput) {
-  Services.input.onMouseUp((event) => handleMouseUp(mouse, event));
-  Services.input.onMouseDown((event) => handleMouseDown(mouse, event));
-  Services.input.onMouseMove((event) => handleMouseMove(mouse, event));
-  Services.input.onMouseWheel((event) => handleMouseWheel(mouse, event));
+  Services.input.onMouseUp(event => handleMouseUp(mouse, event));
+  Services.input.onMouseDown(event => handleMouseDown(mouse, event));
+  Services.input.onMouseMove(event => handleMouseMove(mouse, event));
+  Services.input.onMouseWheel(event => handleMouseWheel(mouse, event));
 }
 
 /** Update within loop */

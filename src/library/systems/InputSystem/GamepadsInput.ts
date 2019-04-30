@@ -1,5 +1,5 @@
-import Services from '../../runtime/ServiceRegistry';
-import {IGamepad} from '../../services/interfaces/IInputService';
+import Services from '../../../runtime/ServiceRegistry';
+import {IGamepad} from '../../services/InputService/IInputService';
 
 /** Available buttons on a gamepad */
 export const enum GamepadButton {
@@ -98,7 +98,7 @@ export function update(gamepads: GamepadsInput) {
 export function isPressed(
   gamepads: GamepadsInput,
   index: number,
-  buttonIndex: GamepadButton
+  buttonIndex: GamepadButton,
 ): boolean {
   if (!gamepads.current[index]) {
     return false;
@@ -112,7 +112,7 @@ export function isPressed(
 export function wasPressed(
   gamepads: GamepadsInput,
   index: number,
-  buttonIndex: GamepadButton
+  buttonIndex: GamepadButton,
 ): boolean {
   if (!gamepads.current[index]) {
     return false;
@@ -134,7 +134,7 @@ export function wasPressed(
 export function getButtonValue(
   gamepads: GamepadsInput,
   index: number,
-  buttonIndex: GamepadButton
+  buttonIndex: GamepadButton,
 ): number {
   if (!gamepads.current[index]) {
     return 0;
@@ -148,7 +148,7 @@ export function getButtonValue(
 export function getAxisValue(
   gamepads: GamepadsInput,
   index: number,
-  axisIndex: GamepadAxis
+  axisIndex: GamepadAxis,
 ): number {
   if (!gamepads.current[index]) {
     return 0;

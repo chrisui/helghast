@@ -1,6 +1,6 @@
-import ILoggerService from './interfaces/ILoggerService';
+import ILoggerService from './ILoggerService';
 
-export class ConsoleLoggerService implements ILoggerService {
+export class LoggerService implements ILoggerService {
   public info(msg: string) {
     // tslint:disable-next-line no-console
     console.log(msg);
@@ -18,5 +18,3 @@ export class ConsoleLoggerService implements ILoggerService {
     console.trace();
   }
 }
-
-export default ConsoleLoggerService;
