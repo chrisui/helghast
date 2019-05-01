@@ -1,12 +1,11 @@
 import {
   IInputService,
-  TKeyEventHandler,
-  TEventBindingID,
-  TMouseEventHandler,
+  IKeyEventHandler,
+  IEventBindingID,
+  IMouseEventHandler
 } from './IInputService';
 
 export class InputService implements IInputService {
-  public readonly gamepadDeadzone = 0;
   public isPointerLocked() {
     return false;
   }
@@ -25,25 +24,25 @@ export class InputService implements IInputService {
   public disableContextMenu() {
     return undefined;
   }
-  public onKeyDown(handler: TKeyEventHandler) {
+  public onKeyDown(handler: IKeyEventHandler) {
     return -1;
   }
-  public onKeyUp(handler: TKeyEventHandler) {
+  public onKeyUp(handler: IKeyEventHandler) {
     return -1;
   }
-  public onMouseMove(handler: TMouseEventHandler) {
+  public onMouseMove(handler: IMouseEventHandler) {
     return -1;
   }
-  public onMouseWheel(handler: TMouseEventHandler) {
+  public onMouseWheel(handler: IMouseEventHandler) {
     return -1;
   }
-  public onMouseDown(handler: TMouseEventHandler) {
+  public onMouseDown(handler: IMouseEventHandler) {
     return -1;
   }
-  public onMouseUp(handler: TMouseEventHandler) {
+  public onMouseUp(handler: IMouseEventHandler) {
     return -1;
   }
-  public removeEventBinding(id: TEventBindingID) {
+  public removeEventBinding(id: IEventBindingID) {
     return true;
   }
   public getGamepads() {

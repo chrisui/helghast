@@ -7,6 +7,8 @@ export class Transform {
   public position: Vec3 = new Vec3();
   /** The local orientation */
   public orientation: Quat = new Quat();
+  /** Local orientation as angles */
+  public rotation: Vec3 = new Vec3();
   /** The local scale */
-  public scale: Vec3 = new Vec3();
+  public scale: Vec3 = Vec3.create(1, 1, 1);
 }

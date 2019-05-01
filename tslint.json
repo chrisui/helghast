@@ -11,7 +11,9 @@
     "array-type": false,
     "object-literal-sort-keys": false,
     "arrow-parens": false,
-    "no-namespace": false
+    "no-namespace": false,
+    "callable-types": false,
+    "member-ordering": [true, {"order": "fields-first"}]
   },
   "linterOptions": {"exclude": ["examples/**/*"]}
 }

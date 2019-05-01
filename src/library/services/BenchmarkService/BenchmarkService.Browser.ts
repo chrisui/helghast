@@ -1,5 +1,5 @@
 import {IBenchmarkService} from './IBenchmarkService';
-import Services from '../../../runtime/ServiceRegistry';
+import {Services} from '../../../runtime/Services';
 
 export class BenchmarkService implements IBenchmarkService {
   private startTimes: {[key: string]: number} = {};

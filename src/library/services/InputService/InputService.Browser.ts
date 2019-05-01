@@ -1,17 +1,17 @@
 import {
   IInputService,
-  TKeyEventHandler,
-  TMouseEventHandler,
+  IKeyEventHandler,
+  IMouseEventHandler,
+  IGamepad
 } from './IInputService';
 
-type TRawEventHandler = (event: Event) => void;
+type IRawEventHandler = (event: Event) => void;
 
 /** An input system which works within the browser environment */
 export class InputService implements IInputService {
-  public readonly gamepadDeadzone = 0.25;
   private flagIsContextMenuEnabled = true;
   private listeners: {
-    [id: number]: {type: string; listener: TRawEventHandler};
+    [id: number]: {type: string; listener: IRawEventHandler};
   } = {};
   private lastListenerId: number = -1;
 
@@ -41,58 +41,58 @@ export class InputService implements IInputService {
     window.removeEventListener('contextmenu', this.preventDefaultHandler);
   }
 
-  public onKeyDown(handler: TKeyEventHandler) {
+  public onKeyDown(handler: IKeyEventHandler) {
     return this.createEventBinding('keydown', this.mapKeyEventHandler(handler));
   }
 
-  public onKeyUp(handler: TKeyEventHandler) {
+  public onKeyUp(handler: IKeyEventHandler) {
     return this.createEventBinding('keyup', this.mapKeyEventHandler(handler));
   }
 
-  public onMouseDown(handler: TMouseEventHandler) {
+  public onMouseDown(handler: IMouseEventHandler) {
     return this.createEventBinding(
       'mousedown',
-      this.mapMouseEventHandler(handler),
+      this.mapMouseEventHandler(handler)
     );
   }
 
-  public onMouseUp(handler: TMouseEventHandler) {
+  public onMouseUp(handler: IMouseEventHandler) {
     return this.createEventBinding(
       'mouseup',
-      this.mapMouseEventHandler(handler),
+      this.mapMouseEventHandler(handler)
     );
   }
 
-  public onMouseWheel(handler: TMouseEventHandler) {
+  public onMouseWheel(handler: IMouseEventHandler) {
     return this.createEventBinding(
       'mousescroll',
-      this.mapMouseEventHandler(handler),
+      this.mapMouseEventHandler(handler)
     );
   }
 
-  public onMouseMove(handler: TMouseEventHandler) {
+  public onMouseMove(handler: IMouseEventHandler) {
     return this.createEventBinding(
       'mousemove',
-      this.mapMouseEventHandler(handler),
+      this.mapMouseEventHandler(handler)
     );
   }
 
   public removeEventBinding(id: number) {
     window.removeEventListener(
       this.listeners[id].type,
-      this.listeners[id].listener,
+      this.listeners[id].listener
     );
     delete this.listeners[id];
     return true;
   }
 
   public getGamepads() {
-    return navigator.getGamepads().filter(gamepad => !!gamepad) as Gamepad[];
+    return (navigator.getGamepads() as unknown) as IGamepad[];
   }
 
   private createEventBinding(
     type: string,
-    listener: any /* RawEventListener */,
+    listener: any /* RawEventListener */
   ) {
     const id = ++this.lastListenerId;
     this.listeners[id] = {type, listener};
@@ -104,7 +104,7 @@ export class InputService implements IInputService {
     event.preventDefault();
   }
 
-  private mapMouseEventHandler(handler: TMouseEventHandler) {
+  private mapMouseEventHandler(handler: IMouseEventHandler) {
     return (event: MouseEvent) => {
       handler({
         button: event.button,
@@ -115,16 +115,16 @@ export class InputService implements IInputService {
         x: event.clientX,
         y: event.clientY,
         xDelta: event.movementX,
-        yDelta: event.movementY,
+        yDelta: event.movementY
       });
     };
   }
 
-  private mapKeyEventHandler(handler: TKeyEventHandler) {
+  private mapKeyEventHandler(handler: IKeyEventHandler) {
     return (event: KeyboardEvent) => {
       handler({
         key: event.key,
-        code: event.code,
+        code: event.code
       });
     };
   }

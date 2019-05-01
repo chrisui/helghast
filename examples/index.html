@@ -2,7 +2,7 @@
 <div id="debug"></div>
 <style>
   body {
-    background: green;
+    background: rgb(51, 51, 51);
   }
 
   #app {
@@ -21,10 +21,17 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: 40vh;
-    opacity: 0.9;
-    background: #000;
+    height: 150px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+  }
+
+  #step {
+    position: fixed;
+    z-index: 5;
+    right: 30px;
+    top: 30px;
   }
 </style>
-
+<button id="step">Step</button>
 <script src="/bundle.js"></script>

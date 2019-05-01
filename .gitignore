@@ -3,3 +3,5 @@
 /schema
 /build
 /dist
+/target
+*.code-workspace

@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "outDir": "./build",
+    "outDir": "./target",
     "target": "esnext",
     "module": "esnext",
     "experimentalDecorators": true,
     "strict": true,
-    "lib": ["dom", "es2017"]
+    "lib": ["dom", "es2017"],
+    "moduleResolution": "node",
+    "esModuleInterop": true
   },
-  "include": ["./src/**/*", "./types/**/*"]
+  "include": ["./src/**/*"]
 }

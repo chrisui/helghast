@@ -7,7 +7,8 @@
     "test": "jest",
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "compile": "tsc",
-    "start": "webpack-dev-server --hot"
+    "start": "webpack-dev-server --hot",
+    "build": "webpack --production"
   },
   "keywords": [
     "game",
@@ -18,12 +19,17 @@
   "license": "MIT",
   "devDependencies": {
     "@phenomnomnominal/tsquery": "^2.0.0-beta.6",
+    "@types/jest": "^24.0.12",
     "@types/webpack-env": "^1.13.6",
     "awesome-typescript-loader": "^5.2.0",
+    "file-loader": "^3.0.1",
+    "jest": "^24.8.0",
     "source-map-loader": "^0.2.3",
+    "ts-jest": "^24.0.2",
     "ts-node": "^7.0.0",
     "tslint": "^5.11.0",
     "typescript": "^3.4.5",
+    "utility-types": "^3.6.1",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
@@ -32,10 +38,15 @@
     "@types/lodash": "^4.14.115",
     "@types/react-dom": "^16.0.6",
     "@types/react-plotly.js": "^2.2.0",
-    "lodash": "^4.17.10",
+    "@types/webgl2": "0.0.4",
+    "benchmark": "^2.1.4",
+    "glslify-loader": "^2.0.0",
+    "lodash": "^4.17.11",
     "plotly.js": "^1.39.3",
+    "raw-loader": "^2.0.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-plotly.js": "^2.2.0"
+    "react-plotly.js": "^2.2.0",
+    "twgl.js": "^4.9.1"
   }
 }

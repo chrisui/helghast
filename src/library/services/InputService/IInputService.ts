@@ -17,24 +17,23 @@ export interface IGamepad {
   axes: number[];
 }
 
-export type TEventBindingID = number;
-export type TKeyEventHandler = (event: IKeyEvent) => void;
-export type TMouseEventHandler = (event: IMouseEvent) => void;
+export type IEventBindingID = number;
+export type IKeyEventHandler = (event: IKeyEvent) => void;
+export type IMouseEventHandler = (event: IMouseEvent) => void;
 
 export interface IInputService {
-  gamepadDeadzone: number;
   isPointerLocked(): boolean;
   lockPointer(): void;
   unlockPointer(): void;
   isContextMenuEnabled(): boolean;
   enableContextMenu(): void;
   disableContextMenu(): void;
-  onKeyDown(handler: TKeyEventHandler): TEventBindingID;
-  onKeyUp(handler: TKeyEventHandler): TEventBindingID;
-  onMouseMove(handler: TMouseEventHandler): TEventBindingID;
-  onMouseWheel(handler: TMouseEventHandler): TEventBindingID;
-  onMouseDown(handler: TMouseEventHandler): TEventBindingID;
-  onMouseUp(handler: TMouseEventHandler): TEventBindingID;
-  removeEventBinding(id: TEventBindingID): boolean;
+  onKeyDown(handler: IKeyEventHandler): IEventBindingID;
+  onKeyUp(handler: IKeyEventHandler): IEventBindingID;
+  onMouseMove(handler: IMouseEventHandler): IEventBindingID;
+  onMouseWheel(handler: IMouseEventHandler): IEventBindingID;
+  onMouseDown(handler: IMouseEventHandler): IEventBindingID;
+  onMouseUp(handler: IMouseEventHandler): IEventBindingID;
+  removeEventBinding(id: IEventBindingID): boolean;
   getGamepads(): IGamepad[];
 }

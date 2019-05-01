@@ -2,41 +2,65 @@
  * [ x, y ]
  */
 export class Vec2 {
+  public static Up: Immutable<Vec2> = Vec2.create(0, 1);
+  public static Right: Immutable<Vec2> = Vec2.create(1, 0);
+  public static Down: Immutable<Vec2> = Vec2.create(0, -1);
+  public static Left: Immutable<Vec2> = Vec2.create(-1, 0);
+
   /** 0 = x */
   public x: number = 0;
   /** 1 = y */
   public y: number = 0;
-}
 
-export namespace Vec2 {
-  /** Create a new identity Vec2 */
-  export function create() {
-    return new Vec2();
+  /**
+   * Create a new vector
+   *
+   * @param x x value
+   * @param y y value
+   */
+  public static create(x: number, y: number) {
+    const vec = new Vec2();
+    vec.x = x;
+    vec.y = y;
+    return vec;
   }
 
   /**
-   * Add two Vec2's
+   * Add two vectors
    *
-   * @param a the first operand
    * @param b the second operand
    * @param out optional target for output
    */
-  export function add(a: Vec2, b: Vec2, out: Vec2 = a) {
+  public add(b: Vec2, out: Vec2 = new Vec2()) {
+    const a = this;
     out.x = a.x + b.x;
     out.y = a.y + b.y;
     return out;
   }
 
   /**
-   * Subtract two Vec2's
+   * Subtract two vectors
    *
-   * @param a the first operand
    * @param b the second operand
    * @param out optional target for output
    */
-  export function subtract(a: Vec2, b: Vec2, out: Vec2 = a) {
+  public subtract(b: Vec2, out: Vec2 = new Vec2()) {
+    const a = this;
     out.x = a.x - b.x;
     out.y = a.y - b.y;
+    return out;
+  }
+
+  /**
+   * Scale a vector
+   *
+   * @param scale the second operand
+   * @param out optional target for output
+   */
+  public scale(factor: number, out: Vec2 = new Vec2()) {
+    const a = this;
+    out.x = a.x * factor;
+    out.y = a.y * factor;
     return out;
   }
 }
